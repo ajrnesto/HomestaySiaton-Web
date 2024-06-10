@@ -1,14 +1,14 @@
-import { onAuthStateChanged, signOut } from '../node_modules/firebase/firebase-auth.js';
-import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js';
+import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.5.2/firebase-auth.js';
+import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js';
 import { db, auth } from '../js/firebase.js';
 import { generateAvatar, showElement, hideElement } from '../js/utils.js';
 
 const btnShop = document.querySelector('#btnShop');
-const btnTrackOrders = document.querySelector('#btnTrackOrders');
+const btnTrackBookings = document.querySelector('#btnTrackBookings');
 const btnCart = document.querySelector('#btnCart');
 const btnAvatar = document.querySelector('#btnAvatar');
 const btnLoginOrSignup = document.querySelector('#btnLoginOrSignup');
-const btnTrackOrdersListItem = document.querySelector('.nav-btn-track-orders');
+const btnTrackBookingsListItem = document.querySelector('.nav-btn-track-bookings');
 const btnCartListItem = document.querySelector('.nav-btn-cart');
 const btnAvatarListItem = document.querySelector('.nav-btn-avatar');
 const btnLoginOrSignupListItem = document.querySelector('.nav-btn-login-or-signup');
@@ -29,20 +29,26 @@ onAuthStateChanged(auth, user => {
 			const userType = userSnap.data().userType;
 
 			if (userType == ADMIN) {
-				window.location = "../admin/dashboard.html";
+				window.location = "./admin/dashboard.html";
 			}
 			else if (userType == CUSTOMER) {
-				showElement(btnTrackOrdersListItem);
+				showElement(btnTrackBookingsListItem);
 				showElement(btnCartListItem);
 				showElement(btnAvatarListItem);
 				hideElement(btnLoginOrSignupListItem);
-				generateAvatar(user.email.toUpperCase());
-				tvEmail.textContent = user.email;
+				if (user.displayName != null) {
+					generateAvatar(user.displayName.toUpperCase());
+					tvEmail.textContent = user.displayName;
+				}
+				else {
+					generateAvatar("?");
+					tvEmail.textContent = user.phoneNumber;
+				}
 			}
 		});
 	}
 	else {
-		hideElement(btnTrackOrdersListItem);
+		hideElement(btnTrackBookingsListItem);
 		hideElement(btnCartListItem);
 		hideElement(btnAvatarListItem);
 		showElement(btnLoginOrSignupListItem);
@@ -51,9 +57,9 @@ onAuthStateChanged(auth, user => {
 
 btnLogout.addEventListener("click", () => {
 	signOut(auth);
-	window.location = "../login.html";
+	window.location = "./login.html";
 });
 
 btnLoginOrSignup.addEventListener("click", () => {
-	window.location = "../login.html";
+	window.location = "./login.html";
 });

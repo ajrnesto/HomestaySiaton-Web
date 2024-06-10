@@ -1,17 +1,17 @@
 // imports
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js';
-import { getAuth } from '../node_modules/firebase/firebase-auth.js';
-import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js';
-import { getStorage } from "../node_modules/firebase/firebase-storage.js";
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js';
+import { getAuth } from 'https://www.gstatic.com/firebasejs/10.5.2/firebase-auth.js';
+import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js';
+import { getStorage } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-storage.js";
 
 export const app = initializeApp({
-	apiKey: "AIzaSyBHj7ai9DnMGMO8jHvchLUxnbmrVST8WhI",
-	authDomain: "j-and-j-motorparts.firebaseapp.com",
-	projectId: "j-and-j-motorparts",
-	storageBucket: "j-and-j-motorparts.appspot.com",
-	messagingSenderId: "497755068532",
-	appId: "1:497755068532:web:6fe41ea958a74f85281921",
-	measurementId: "G-P1S76JTRLM"
+  apiKey: "AIzaSyDYvkV_430JUR8GQ9PlrLZOCEIJbBAGqvk",
+  authDomain: "homestay-siaton.firebaseapp.com",
+  projectId: "homestay-siaton",
+  storageBucket: "homestay-siaton.appspot.com",
+  messagingSenderId: "926599309505",
+  appId: "1:926599309505:web:2cc61f813ea646c4a54c40",
+  measurementId: "G-QHLRMNQWEZ"
 });
 
 export const auth = getAuth(app);

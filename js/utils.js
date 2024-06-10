@@ -1,27 +1,33 @@
 import { db } from '../js/firebase.js';
-import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js';
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut  } from 'https://www.gstatic.com/firebasejs/10.5.2/firebase-auth.js';
+import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js';
 
 /* authentication */
 export function checkUserTypeThenRedirect(user) {
 	if (!user) {
+		window.location = "./login.html";
 		return;
 	}
 
 	const docRef = doc(db, "users", user.uid);
 	getDoc(docRef).then(userSnap => {
 		const userType = userSnap.data().userType;
-		if (userType == 0) {
-			window.location = "../shop.html";
+
+		if (userType == 1) {
+			window.location = "./units.html";
 		}
-		else if (userType == 1) {
-			window.location = "../admin/dashboard.html";
+		else if (userType == 2) {
+			window.location = "./units.html";
+		}
+		else {
+			signOut(getAuth());
 		}
 	});
 }
 
 export function checkAuthThenRedirect(user) {
 	if (!user) {
-		window.location = "../shop.html";
+		window.location = "./login.html";
 		return;
 	}
 
@@ -30,15 +36,15 @@ export function checkAuthThenRedirect(user) {
 
 export function blockNonAdmins(user) {
 	if (!user) {
-		window.location = "../shop.html";
+		window.location = "./login.html";
 		return;
 	}
 
 	const docRef = doc(db, "users", user.uid);
 	getDoc(docRef).then(userSnap => {
 		const userType = userSnap.data().userType;
-		if (userType != 1) {
-			window.location = "../shop.html";
+		if (userType == 0) {
+			window.location = "./login.html";
 		}
 	});
 }
@@ -90,7 +96,7 @@ export function generateAvatar(firstName) {
     const context = canvas.getContext("2d");
 
     const foregroundColor = "white";
-    const backgroundColor = '#2980ba';
+    const backgroundColor = '#b98357';
 
     canvas.width = 35;
     canvas.height = 35;
@@ -112,6 +118,31 @@ export function generateAvatar(firstName) {
 	});
 }
 
+export function parseDate(millis) {
+    const date = new Date(millis);
+    const formattedDate = date.toLocaleString('en-US',
+        {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+            // weekday:"long",
+            // hour: '2-digit',
+            // hour12: true,
+            // minute:'2-digit',
+            //second:'2-digit'
+        });
+    return formattedDate;
+}
+
+export function parseActionText(status) {
+  if (status == "pending") {
+      return "Accept";
+  }
+	else if (status == "accepted") {
+		return "Complete";
+	}
+}
+
 export function parseButtonAction(status, deliveryOption) {
 	if (status == "Pending") {
 		return "Prepare Order";
@@ -130,7 +161,7 @@ export function parseButtonAction(status, deliveryOption) {
 	else if (status == "In Transit") {
 		return "Mark as Delivered";
 	}
-	else if (status == "Delivered/Picked-up") {
+	else if (status == "Delivered/Picked-up" || status == "Failed Delivery") {
 		return -1;
 	}
 }

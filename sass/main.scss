@@ -4,14 +4,14 @@
 /* custom variables go here */
 
 // color theming
-$primary: #2980ba;
+$primary: #b98357;
 //$secondary: #68A357;
-$secondary: #2980ba;
+$secondary: #DE6E4B;
 $light: #f7f7f7;
 $dark: #5a5a5a;
-$danger: #e64c3c;
-$info: #2980ba;
-$success: #32965D;
+$danger: #DE6E4B;
+$info: #2FBF71;
+$success: #68A357;
 
 // icons
 i {
@@ -33,7 +33,7 @@ $nav-pills-link-active-bg: $primary;
 }
 
 // button theming
-.btn-primary {
+.btn-primary, .btn-danger {
 	color: white !important;
 }
 .btn-outline-primary:hover, .btn-outline-danger:hover, .btn-outline-dark:hover {

@@ -1,5 +1,5 @@
 import { db, storage } from '../js/firebase.js';
-import { doc, collection, addDoc, updateDoc, deleteDoc, query, orderBy, startAt, endAt, onSnapshot } from 'https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js';
+import { doc, collection, addDoc, updateDoc, deleteDoc, query, orderBy, startAt, endAt, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js';
 import { showModal, hideModal, resetValidation, invalidate } from '../js/utils.js';
 
 // table
@@ -41,7 +41,7 @@ menuCategory.addEventListener("change", () => {
 	const SELECTED_MENU_OPTION = menuCategory.value;
 	
 	if (SELECTED_MENU_OPTION == ADD_NEW_CATEGORY) {
-		hideModal('#modalManageProduct');
+		hideModal('#modalManageUnit');
 		showModal('#modalManageCategory');
 		manageCategory(null, null);
 	}
@@ -69,7 +69,7 @@ function renderCategoriesSelectOptions() {
 
 		snapCategories.forEach(category => {
 			const categoryName = category.data().categoryName;
-			const products = category.data().products;
+			const units = category.data().units;
 
 			if (categoryName != "Uncategorized") {
 				const optionForMenuCategoriesFilter = document.createElement("option");
@@ -84,13 +84,13 @@ function renderCategoriesSelectOptions() {
             renderCategoryTable(
 				category.id,
 				categoryName,
-				products
+				units
 			);
         });
 	});
 }
 
-function renderCategoryTable(id, categoryName, products) {
+function renderCategoryTable(id, categoryName, units) {
     const newRow = document.createElement('tr');
     const cellCategoryName = document.createElement('td');
     const cellItems = document.createElement('td');
@@ -121,7 +121,7 @@ function renderCategoryTable(id, categoryName, products) {
 	}
 	
 	cellCategoryName.innerHTML = categoryName;
-	cellItems.innerHTML = parseInt(products);
+	cellItems.innerHTML = parseInt(units);
 
     newRow.appendChild(cellCategoryName);
     newRow.appendChild(cellItems);
@@ -163,7 +163,7 @@ function saveCategory(categoryId) {
 		addDoc(collection(db, "categories"), {
 			categoryName: categoryName,
 			categoryNameAllCaps: categoryName.toUpperCase(),
-			products: parseInt(0)
+			units: parseInt(0)
 		});
 	}
 	else {
@@ -179,6 +179,7 @@ function saveCategory(categoryId) {
 
 function confirmDeleteCategory(categoryId, categoryName) {
 	tvConfirmDeleteMessage.innerHTML = "Delete the category \"" + categoryName + "\"?\n<br>This will mark all items under this category as uncategorized.";
+	btnDelete.textContent = "Delete Category";
 	showModal('#modalConfirmDelete');
 
 	btnDelete.onclick = function() {

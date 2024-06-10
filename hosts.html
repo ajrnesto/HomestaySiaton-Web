@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hosts</title>
+  <link rel="stylesheet" href="/css/main.min.css">
+  <link rel="stylesheet" href="/css/global.css">
+	<link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-regular-straight/css/uicons-regular-straight.css'>
+	<link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css'>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+  <script type="module" src="/js/navbar-admin.js"></script>
+  <script type="module" src="/js/hosts.js"></script>
+</head>
+
+<body class="bg-light">
+	<nav class="navbar sticky-top navbar-expand-md navbar-light py-0" style="background-color: white;">
+		<div class="container-fluid justify-content-center">
+		  <a class="navbar-brand col-9 col-md-2 ms-0 ms-md-4" href="#"><img src="/images/logo.png" alt="J&J" width="80"/></a>
+		  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		  </button>
+		  <div class="collapse col-9 col-md-10 navbar-collapse justify-content-end" id="navbarSupportedContent">
+			<div class="col-12 col-md-6"></div>
+			<ul class="navbar-nav col-12 col-md-auto justify-content-center mb-2 mb-lg-0">
+				<li class="nav-item col-sm-auto px-3 text-center py-2">
+					<a class="nav-link" href="dashboard.html">Dashboard</a>
+				</li>
+				<li class="nav-item col-sm-auto px-3 text-center py-2">
+					<a class="nav-link" href="units.html">Manage Units</a>
+				</li>
+				<li class="nav-item col-sm-auto px-3 text-center py-2">
+					<a class="nav-link" href="bookings.html">Bookings</a>
+				</li>
+				<li id="navManageHosts" class="nav-item col-sm-auto px-3 text-center py-2 bg-primary">
+					<a class="nav-link active" aria-current="page" href="#">Manage Hosts</a>
+				</li>
+				<li class="nav-item nav-btn-avatar col-sm-auto px-3 text-center py-auto dropdown">
+					<a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+						<img class="user-avatar my-0 py-0" alt="">
+					</a>
+					<ul class="dropdown-menu dropdown-menu-end">
+						<li><a class="dropdown-item text-center disabled text-primary" href="#"><img class="user-avatar my-0 py-0" alt=""></a></li>
+						<li><a class="dropdown-item text-center dropdown-text-email disabled text-primary" href="#">Email Address</a></li>
+						<li><a class="dropdown-item text-center text-danger" href="#" id="btnLogout">Log out</a></li>
+					</ul>
+				</li>
+			</ul>
+		  </div>
+		</div>
+	</nav>
+
+	<div class="row pt-3 px-5">
+		<div class="w-75 input-group input-group mx-auto">
+			<input id="etFilterFirstName" type="text" class="form-control rounded-left" placeholder="First Name" aria-label="First Name">
+			<input id="etFilterLastName" type="text" class="form-control" placeholder="Last Name" aria-label="Last Name">
+			<button class="btn btn-primary search-button rounded-end" type="button" id="btnSearchUser">
+				<i class="fi fi-br-search text-light me-1" style="font-size: 0.8rem;"></i>
+				Filter by Name
+			</button>
+			<button class="btn btn-outline-danger ms-2 rounded" type="button" id="btnClearFilter">
+				<i class="fi fi-br-cross text-danger me-1" style="font-size: 0.8rem;"></i>
+				Clear Filters
+			</button>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-12 pt-4 py-xl-4 pe-xl-4">
+			<div class="container rounded table-responsive bg-white p-4">
+				<div class="row">
+					<h5 class="text-start text-primary col-5 my-auto">Hosts</h5>
+					<div class="col-7 d-none">
+						<button class="btn btn-primary float-end" id="btnOpenAddHostModal" type="button" data-bs-toggle="modal" data-bs-target="#modalManageHost"><i class="bi bi-plus-lg me-2 text-light" style="font-size: 1rem;"></i>Add New Host</button>
+					</div>
+					
+					<table class="table align-middle mt-4">
+						<thead>
+							<tr>
+								<th scope="col" class="col-1">UID</th>
+								<th scope="col" class="col-1">ID</th>
+								<th scope="col" class="col-1">First Name</th>
+								<th scope="col" class="col-1">Last Name</th>
+								<th scope="col" class="col-1">Mobile</th>
+								<!-- <th scope="col" class="col-1">Email</th> -->
+								<!-- <th scope="col" class="col-1">Password</th> -->
+								<!-- <th scope="col" class="col-1 invisible">Toggle</th> -->
+								<th scope="col" class="col-1">Units</th>
+								<th scope="col" class="col-1">Action</th>
+							</tr>
+						</thead>
+						<tbody id="tbodyUsers"></tbody>
+					</table>
+					<div id="tvEmptyMessage" class="d-none col-12 text-center"><h4>No users found</h4></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="modalViewId" class="modal fade" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5 text-primary">Host ID</h1>
+					<button id="btnCloseModal" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body bg-light">
+					<img id="imgId" class="rounded col-12">
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div id="modalManageHost" class="modal fade" tabindex="-1" aria-labelledby="modalManageHostTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-md">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 id="tvManageHostTitle" class="modal-title fs-5">Add New Host</h1>
+					<button id="btnCloseModal" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="container-fluid">
+						<div class="row justify-content-center">
+							<div class="col-12">
+								<div class="input-group has-validation mb-2">
+									<div class="form-floating first-name-validator">
+										<input type="text" class="form-control first-name-validator" id="etFirstName" placeholder="First Name" required>
+										<label for="etFirstName">First Name</label>
+									</div>
+									<div class="invalid-feedback">
+										Please enter the host's first name.
+									</div>
+								</div>
+								<div class="input-group has-validation mb-2">
+									<div class="form-floating last-name-validator">
+										<input type="text" class="form-control last-name-validator" id="etLastName" placeholder="Last Name" required>
+										<label for="etLastName">Last Name</label>
+									</div>
+									<div class="invalid-feedback">
+										Please enter the host's last name.
+									</div>
+								</div>
+								<div class="input-group has-validation mb-2">
+									<div class="form-floating mobile-validator">
+										<input type="tel" class="form-control mobile-validator" id="etMobile" placeholder="Mobile Number" required>
+										<label for="etMobile">Mobile Number</label>
+									</div>
+									<div class="invalid-feedback">
+										Please enter the host's mobile number.
+									</div>
+								</div>
+								<div class="input-group has-validation mb-2">
+									<div class="form-floating email-validator">
+										<input type="email" class="form-control email-validator" id="etEmail" placeholder="Email" required>
+										<label for="etEmail">Email</label>
+									</div>
+									<div class="invalid-feedback">
+										Please enter a valid email.
+									</div>
+								</div>
+								<div class="input-group has-validation mb-2">
+									<div class="form-floating password-validator">
+										<input type="password" class="form-control password-validator" id="etPassword" placeholder="Password" required>
+										<label for="etPassword">Password</label>
+									</div>
+									<button class="btn btn-light border" type="button" id="btnPasswordToggle">
+										<i class="fi fi-br-eye text-dark mx-2" style="font-size: 1rem;"></i>
+									</button>
+									<div class="invalid-feedback">
+										Please enter a valid password.
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-light py-2" data-bs-dismiss="modal">Cancel</button>
+					<button id="btnAddHost" type="button" class="btn btn-primary px-3">Add Host</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
